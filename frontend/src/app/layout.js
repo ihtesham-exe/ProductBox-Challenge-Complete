@@ -3,7 +3,6 @@ import "./globals.css";
 import Navbar from "../components/Navbar";
 import FooterBlock from "../components/Footer";
 import QueryProvider from "../components/QueryProvider";
-import { StoreProvider } from "../contexts/store";
 import { Toaster } from "sonner";
 
 const geistSans = Geist({
@@ -27,14 +26,12 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}
       >
-        <StoreProvider>
-          <QueryProvider>
-            <Navbar />
-            <main className="flex-1">{children}</main>
-            <FooterBlock />
-            <Toaster position="top-right" richColors />
-          </QueryProvider>
-        </StoreProvider>
+        <QueryProvider>
+          <Navbar />
+          <main className="flex-1">{children}</main>
+          <FooterBlock />
+          <Toaster position="top-right" richColors />
+        </QueryProvider>
       </body>
     </html>
   );

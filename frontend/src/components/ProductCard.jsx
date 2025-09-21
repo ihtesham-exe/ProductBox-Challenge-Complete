@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import PropTypes from "prop-types";
-import { useStore } from "../hooks/useStore";
+import useCartStore from "@/stores/useCartStore";
 import { getImageSrc } from "../utils";
 import { useDeleteProduct } from "../controllers/productController";
 
@@ -11,11 +11,11 @@ const Card = ({ item }) => {
   const img = getImageSrc(item?.img);
   const router = useRouter();
 
-  const { dispatch } = useStore();
+  const { addToCart } = useCartStore();
   const { mutate: deleteProduct, isPending: isDeleting } = useDeleteProduct();
 
   const handleAddToCart = (item) => {
-    dispatch({ type: "ADD_TO_CART", payload: item });
+    addToCart(item);
   };
 
   const handleDeleteProduct = (e) => {

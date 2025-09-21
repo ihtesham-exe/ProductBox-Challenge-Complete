@@ -2,14 +2,14 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { useStore } from "@/hooks/useStore";
+import useCartStore from "@/stores/useCartStore";
 
 const Navbar = () => {
   const [openNavbar, setOpenNavbar] = useState(false);
-  const { state } = useStore();
+  const { getCartItemCount } = useCartStore();
 
-  // Calculate total cart items
-  const cartItemCount = state.items?.length || 0;
+  // Calculate total cart items using Zustand store method
+  const cartItemCount = getCartItemCount();
 
   const toggleNavbar = () => {
     setOpenNavbar((openNavbar) => !openNavbar);

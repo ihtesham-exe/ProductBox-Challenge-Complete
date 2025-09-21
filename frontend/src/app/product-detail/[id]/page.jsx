@@ -4,7 +4,7 @@ import React from "react";
 import { useParams, useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { useProductDetail } from "@/controllers/productController";
-import { useStore } from "@/hooks/useStore";
+import useCartStore from "@/stores/useCartStore";
 import { getImageSrc } from "@/utils";
 
 function ProductDetail() {
@@ -13,11 +13,11 @@ function ProductDetail() {
   const { id } = params;
 
   const { data: product, isLoading, error } = useProductDetail(id);
-  const { dispatch } = useStore();
+  const { addToCart } = useCartStore();
 
   const handleAddToCart = () => {
     if (product) {
-      dispatch({ type: "ADD_TO_CART", payload: product });
+      addToCart(product);
       toast.success(`${product.name} added to cart!`);
     }
   };

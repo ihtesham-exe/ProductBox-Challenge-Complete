@@ -1,38 +1,32 @@
 "use client";
 
 import React from "react";
-import { useStore } from "@/hooks/useStore";
+import useCartStore from "@/stores/useCartStore";
 import { getImageSrc } from "@/utils";
 import { toast } from "sonner";
 
 function Cart() {
-  const { state, dispatch } = useStore();
-  const rawCartItems = state.items || [];
+  const {
+    items: rawCartItems,
+    addToCart,
+    removeFromCart,
+    clearCart,
+    setCart,
+    getGroupedCartItems,
+    getTotalPrice,
+  } = useCartStore();
 
-  // Group items by ID and calculate quantities
-  const cartItems = rawCartItems.reduce((acc, item) => {
-    const existingItem = acc.find((i) => i.id === item.id);
-    if (existingItem) {
-      existingItem.quantity += 1;
-    } else {
-      acc.push({ ...item, quantity: 1 });
-    }
-    return acc;
-  }, []);
-
-  // Calculate total price with quantities
-  const totalPrice = cartItems.reduce(
-    (total, item) => total + parseFloat(item.price) * item.quantity,
-    0
-  );
+  // Get grouped items and total price using store methods
+  const cartItems = getGroupedCartItems();
+  const totalPrice = getTotalPrice();
 
   const handleRemoveItem = (itemId) => {
-    dispatch({ type: "REMOVE_FROM_CART", payload: itemId });
+    removeFromCart(itemId);
     toast.success("Item removed from cart");
   };
 
   const handleIncreaseQuantity = (item) => {
-    dispatch({ type: "ADD_TO_CART", payload: item });
+    addToCart(item);
     toast.success("Quantity increased");
   };
 
@@ -44,13 +38,8 @@ function Cart() {
       const updatedItems = [...rawCartItems];
       updatedItems.splice(itemIndex, 1);
 
-      // Update localStorage manually
-      if (typeof window !== "undefined") {
-        localStorage.setItem("cartItems", JSON.stringify(updatedItems));
-      }
-
-      // Dispatch a custom action to update state
-      dispatch({ type: "SET_CART", payload: updatedItems });
+      // Update the cart with one less item
+      setCart(updatedItems);
       toast.success("Quantity decreased");
     } else {
       handleRemoveItem(item.id);
@@ -58,7 +47,7 @@ function Cart() {
   };
 
   const handleClearCart = () => {
-    dispatch({ type: "CLEAR_CART" });
+    clearCart();
     toast.success("Cart cleared successfully");
   };
 
