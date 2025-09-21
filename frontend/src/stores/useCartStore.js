@@ -1,5 +1,5 @@
-import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
 
 const useCartStore = create(
   persist(
@@ -10,13 +10,13 @@ const useCartStore = create(
       // Actions
       addToCart: (item) => {
         set((state) => ({
-          items: [...state.items, item]
+          items: [...state.items, item],
         }));
       },
 
       removeFromCart: (itemId) => {
         set((state) => ({
-          items: state.items.filter((item) => item.id !== itemId)
+          items: state.items.filter((item) => item.id !== itemId),
         }));
       },
 
@@ -57,7 +57,7 @@ const useCartStore = create(
       },
     }),
     {
-      name: 'cartItems', // localStorage key
+      name: "cartItems", // localStorage key
       getStorage: () => localStorage, // use localStorage
     }
   )
